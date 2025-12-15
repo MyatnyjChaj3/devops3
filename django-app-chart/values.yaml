@@ -1,0 +1,57 @@
+# Global settings
+global:
+  namespace: django-app
+
+# Image settings
+image:
+  repository: "192.168.1.10:30500/django-app"  # Приватный registry
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+# Application configuration
+app:
+  replicas: 4
+  serviceType: LoadBalancer
+  port: 8000
+  # Resource limits
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  # Environment variables
+  env:
+    DEBUG: "False"
+    ALLOWED_HOSTS: "*"
+    DB_PORT: "5432"
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: ""  # Пусто для k3s, если нет ingress-class
+  hosts:
+    - host: "django.192.168.1.10.nip.io"
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# PostgreSQL configuration (from Bitnami chart)
+postgresql:
+  enabled: true
+  auth:
+    database: "django_prod"
+    username: "django_user"
+    password: "SuperSecret123!"  # Измените на реальный; в prod используйте secrets
+  persistence:
+    enabled: true
+    size: 5Gi
+# Monitoring configuration
+monitoring:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+fluentbit:
+  enabled: true
