@@ -1,0 +1,65 @@
+deploymentMode: SingleBinary
+
+loki:
+  auth_enabled: false
+  # Это ключевой блок для прохождения валидации filesystem
+  commonConfig:
+    replication_factor: 1
+    path_prefix: /var/loki
+    storage:
+      filesystem:
+        chunks_directory: /var/loki/chunks
+        rules_directory: /var/loki/rules
+  
+  storage:
+    type: 'filesystem'
+
+  schemaConfig:
+    configs:
+      - from: "2024-01-01"
+        store: tsdb
+        object_store: filesystem
+        schema: v13
+        index:
+          prefix: index_
+          period: 24h
+
+  # Выключаем проверку внешних хранилищ
+  storage_config:
+    filesystem:
+      directory: /var/loki/chunks
+    tsdb_shipper:
+      active_index_directory: /var/loki/index
+      cache_location: /var/loki/index_cache
+
+# Явно выключаем масштабируемые компоненты, чтобы не срабатывал validate.yaml:19:4
+backend:
+  replicas: 0
+read:
+  replicas: 0
+write:
+  replicas: 0
+
+# Убираем тяжелые кэши
+memcached:
+  chunks_cache:
+    enabled: false
+  results_cache:
+    enabled: false
+chunksCache:
+  enabled: false
+resultsCache:
+  enabled: false
+
+# Остальное барахло
+lokiCanary:
+  enabled: false
+test:
+  enabled: false
+
+promtail:
+  enabled: true
+  deploymentMode: DaemonSet
+  config:
+    clients:
+      - url: http://loki-gateway/loki/api/v1/push

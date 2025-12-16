@@ -20,6 +20,7 @@ from .views import health_check
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('django_prometheus.urls')),
     path('health/', health_check), 
     path('', health_check),  # Главная страница покажет имя пода
 ]

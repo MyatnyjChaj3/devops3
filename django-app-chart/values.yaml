@@ -1,7 +1,6 @@
 # Global settings
 global:
   namespace: django-app
-
 # Image settings
 image:
   repository: "192.168.1.10:30500/django-app"  # Приватный registry
@@ -30,7 +29,7 @@ app:
 # Ingress configuration
 ingress:
   enabled: true
-  className: ""  # Пусто для k3s, если нет ingress-class
+  className: "traefik"  # Пусто для k3s, если нет ingress-class
   hosts:
     - host: "django.192.168.1.10.nip.io"
       paths:
@@ -54,4 +53,4 @@ monitoring:
   serviceMonitor:
     enabled: true
 fluentbit:
-  enabled: true
+  enabled: false
