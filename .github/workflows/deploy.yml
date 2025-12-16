@@ -4,8 +4,8 @@ on:
     branches: [ main ] # Используем main, как в вашем примере
 
 env:
-  REGISTRY: "192.168.1.10:30500" # <-- ВАЖНО: Замените на ваш реальный IP и порт Insecure Registry
-  IMAGE_NAME: "django-app"
+  REGISTRY: "ghcr.io" # <-- ВАЖНО: Замените на ваш реальный IP и порт Insecure Registry
+  IMAGE_NAME: "myatnyjchaj3/devops3"
   HELM_RELEASE: "django-app"
   K8S_NAMESPACE: "django-app" # <-- Или другое ваше рабочее пространство
 
@@ -22,9 +22,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Log in to private registry
-        # ВАЖНО: В реальной жизни используйте GitHub Secrets для логина/пароля!
-        run: docker login ${{ env.REGISTRY }} -u admin -p password
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
         
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
