@@ -73,6 +73,7 @@ jobs:
             --namespace ${{ env.K8S_NAMESPACE }} \
             --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} \
             --set image.tag=${{ github.sha }} \
+            --set "imagePullSecrets[0].name=regcred" \
             --set app.replicas=3 \
             --set postgresql.auth.postgresPassword=SuperSecret123! \
             --set global.postgresql.auth.postgresPassword=SuperSecret123! \
