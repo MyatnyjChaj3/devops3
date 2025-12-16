@@ -5,7 +5,9 @@ global:
 image:
   repository: "192.168.1.10:30500/django-app"  # Приватный registry
   tag: "latest"
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
+imagePullSecrets:
+  - name: regcred
 
 # Application configuration
 app:

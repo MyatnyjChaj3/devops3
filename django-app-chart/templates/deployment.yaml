@@ -20,9 +20,9 @@ spec:
         prometheus.io/path: "/metrics"
         rollme: {{ randAlphaNum 5 | quote }}
     spec:
-      {{- if .Values.imagePullSecrets }}
+      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        - name: {{ .Values.imagePullSecrets }}
+        {{ - toYaml . | nindent 8 }}
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
