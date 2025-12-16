@@ -6,7 +6,7 @@ on:
 env:
   REGISTRY: "192.168.1.10:30500" # <-- ВАЖНО: Замените на ваш реальный IP и порт Insecure Registry
   IMAGE_NAME: "django-app"
-  HELM_RELEASE: "django-app-production"
+  HELM_RELEASE: "django-app"
   K8S_NAMESPACE: "django-app" # <-- Или другое ваше рабочее пространство
 
 jobs:
